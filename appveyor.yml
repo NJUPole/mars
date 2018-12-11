@@ -55,9 +55,9 @@ install:
   - "python -m pip install --disable-pip-version-check --user --upgrade pip"
 
   # Install the build dependencies of the project.
+  - "pip install --upgrade wheel twine setuptools coveralls"
   - "pip install -r requirements-dev.txt"
   - "pip install -r requirements-extra.txt"
-  - "pip install wheel twine setuptools coveralls"
 
 
 build_script:
