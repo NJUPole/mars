@@ -55,7 +55,7 @@ build_script:
 
 
 test_script:
-  - "python -m pytest --timeout=1500 --cov-config .coveragerc --cov=mars mars"
+  - "python -m pytest --ignore=mars/actors --timeout=1500 --cov-config .coveragerc --cov=mars mars"
 
 after_test:
 
