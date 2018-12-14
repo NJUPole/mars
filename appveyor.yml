@@ -7,21 +7,22 @@ environment:
     - PYTHON: "C:\\Python27-x64"
       PYTHON_VERSION: "2.7.x"
       PYTHON_ARCH: "64"
+      platform: x64
 
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "3.5.x"
       PYTHON_ARCH: "64"
+      platform: x64
 
     - PYTHON: "C:\\Python36-x64"
       PYTHON_VERSION: "3.6.x"
       PYTHON_ARCH: "64"
+      platform: x64
 
     - PYTHON: "C:\\Python37-x64"
       PYTHON_VERSION: "3.7.0"
       PYTHON_ARCH: "64"
-
-platform:
-    - x64
+      platform: x64
 
 install:
   # Install Python (from the official .msi of http://python.org) and pip when
@@ -55,7 +56,7 @@ build_script:
 
 
 test_script:
-  - "python -m pytest --ignore=mars/actors --timeout=1500 --cov-config .coveragerc --cov=mars mars"
+  - "python -m pytest --ignore=mars/actors mars/worker --timeout=1500 --cov-config .coveragerc --cov=mars mars"
 
 after_test:
 
