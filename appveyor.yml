@@ -20,6 +20,9 @@ environment:
       PYTHON_VERSION: "3.7.0"
       PYTHON_ARCH: "64"
 
+platform:
+    - x64
+
 install:
   # Install Python (from the official .msi of http://python.org) and pip when
   # not already installed.
