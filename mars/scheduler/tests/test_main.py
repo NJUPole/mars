@@ -135,6 +135,9 @@ class Test(unittest.TestCase):
             if session_ref.graph_state(graph_key) in GraphState.TERMINATED_STATES:
                 return session_ref.graph_state(graph_key)
 
+    import sys
+
+    @unittest.skipIf(sys.platform=='win32', "plasma don't support windows")
     def testMain(self):
         session_id = uuid.uuid1()
         scheduler_address = '127.0.0.1:' + self.scheduler_port

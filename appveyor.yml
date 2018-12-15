@@ -4,10 +4,10 @@ environment:
 
   matrix:
 
-    - PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7.x"
-      PYTHON_ARCH: "64"
-      platform: x64
+#    - PYTHON: "C:\\Python27-x64"
+#      PYTHON_VERSION: "2.7.x"
+#      PYTHON_ARCH: "64"
+#      platform: x64
 
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "3.5.x"
@@ -56,7 +56,7 @@ build_script:
 
 
 test_script:
-  - "python -m pytest --ignore=mars/actors mars/worker --timeout=1500 --cov-config .coveragerc --cov=mars mars"
+  - "python -m pytest -p no:warnings --ignore=mars/actors;mars/worker --timeout=1500 --cov-config .coveragerc --cov=mars mars"
 
 after_test:
 
