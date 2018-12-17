@@ -25,6 +25,7 @@ from .server import register_api_handler
 from ..compat import six, futures
 from ..lib.tblib import pickling_support
 from ..actors import new_client
+from .server import MarsWebAPI
 
 pickling_support.install()
 _actor_client = new_client()
@@ -47,8 +48,9 @@ if six.PY2:
 
 
 class ApiRequestHandler(web.RequestHandler):
-    def initialize(self, web_api):
-        self.web_api = web_api
+    def initialize(self, scheduler_ip):
+         self._scheduler = scheduler_ip
+         self.web_api = MarsWebAPI(scheduler_ip)
 
 
 class ApiEntryHandler(ApiRequestHandler):
@@ -104,6 +106,8 @@ class GraphApiHandler(ApiRequestHandler):
             self.write(json.dumps(dict(state='failed')))
         elif state == GraphState.CANCELLED:
             self.write(json.dumps(dict(state='cancelled')))
+        elif state == GraphState.CANCELLING:
+            self.write(json.dumps(dict(state='cancelling')))
         elif state == GraphState.PREPARING:
             self.write(json.dumps(dict(state='preparing')))
 
@@ -115,8 +119,12 @@ class GraphDataHandler(ApiRequestHandler):
     @gen.coroutine
     def get(self, session_id, graph_key, tensor_key):
         executor = futures.ThreadPoolExecutor(1)
-        data = yield executor.submit(
-            self.web_api.fetch_data, session_id, graph_key, tensor_key)
+
+        def _fetch_fun():
+            web_api = MarsWebAPI(self._scheduler)
+            return web_api.fetch_data(session_id, graph_key, tensor_key)
+
+        data = yield executor.submit(_fetch_fun)
         self.write(data)
 
     def delete(self, session_id, graph_key, tensor_key):

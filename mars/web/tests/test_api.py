@@ -166,3 +166,19 @@ class Test(unittest.TestCase):
             c = a.dot(b)
             value = sess.run(c, timeout=120)
             assert_array_equal(value, va.dot(vb))
+
+            # test test multiple outputs
+            a = mt.random.rand(10, 10)
+            U, s, V, raw = sess.run(list(mt.linalg.svd(a)) + [a])
+            np.testing.assert_allclose(U.dot(np.diag(s).dot(V)), raw)
+
+            # check web UI requests
+            res = requests.get(service_ep)
+            self.assertEqual(res.status_code, 200)
+
+            res = requests.get(service_ep + '/task')
+            self.assertEqual(res.status_code, 200)
+
+            res = requests.get(service_ep + '/worker')
+            self.assertEqual(res.status_code, 200)
+
