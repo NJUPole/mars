@@ -7,10 +7,6 @@ environment:
 
   matrix:
 
-#    - PYTHON: "C:\\Python27-x64"
-#      PYTHON_VERSION: "2.7.x"
-#      PYTHON_ARCH: "64"
-
     - PYTHON: "C:\\Python35-x64"
       PYTHON_VERSION: "3.5.x"
       PYTHON_ARCH: "64"
@@ -24,6 +20,7 @@ environment:
       PYTHON_ARCH: "64"
 
 install:
+  - set PATH=C:\Program Files (x86)\Windows Kits\10\bin\%platform%\;%PATH%
   # Install Python (from the official .msi of http://python.org) and pip when
   # not already installed.
   - ps: if (-not(Test-Path($env:PYTHON))) { & bin\appveyor_install.ps1 }
@@ -50,12 +47,11 @@ install:
 build_script:
   - "python setup.py build_ext -i"
   # Build tar zip only once
-  - ps: if ($env:PYTHON_VERSION -eq "2.7.x" -and $env:PYTHON_ARCH -eq "32") { Invoke-Expression "python setup.py sdist --formats=gztar" }
   - "python setup.py bdist_wheel"
 
 
 test_script:
-  - "python -m pytest -p no:warnings --ignore=mars/actors;mars/worker --timeout=1500 --cov-config .coveragerc --cov=mars mars"
+  - "python -m pytest -p no:warnings --ignore=mars/worker --timeout=1500 --cov-config .coveragerc --cov=mars mars"
 
 after_test:
 
