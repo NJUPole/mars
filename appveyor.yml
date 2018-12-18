@@ -59,7 +59,7 @@ after_test:
   - echo index-servers =                             >> %USERPROFILE%\\.pypirc
   - echo     pypi                                    >> %USERPROFILE%\\.pypirc
   - echo [pypi]                                      >> %USERPROFILE%\\.pypirc
-  - echo repository=https://upload.pypi.org/test/    >> %USERPROFILE%\\.pypirc
+  - echo repository=https://test.pypi.org/    >> %USERPROFILE%\\.pypirc
   - echo username=pyodps                             >> %USERPROFILE%\\.pypirc
   - echo password=%SECUREPSD%                        >> %USERPROFILE%\\.pypirc
 
