@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import psutil
+import multiprocessing
 
 from .cluster cimport ClusterInfo
 
@@ -122,9 +122,8 @@ cpdef object create_actor_pool(str address=None, int n_process=0, object distrib
 
     standalone = address is None
     if n_process <= 0:
-        n_process = psutil.cpu_count()
+        n_process = multiprocessing.cpu_count()
 
-    print(n_process)
     cluster_info = ClusterInfo(standalone, n_process, address=address)
     pool = ActorPool(cluster_info, distributor=distributor, parallel=parallel)
     pool.run()

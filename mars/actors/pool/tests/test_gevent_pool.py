@@ -173,6 +173,7 @@ class AdminDistributor(Distributor):
         return int(hashlib.sha1(to_binary(uid)).hexdigest(), 16) % (self.n_process - 1) + 1
 
 
+@unittest.skipIf(sys.platform == 'win32', 'does not run in windows')
 class Test(unittest.TestCase):
     def setUp(self):
         self.exceptions = gevent.hub.Hub.NOT_ERROR
