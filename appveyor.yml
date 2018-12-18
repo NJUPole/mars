@@ -43,12 +43,6 @@ install:
   - "pip install -r requirements-extra.txt"
 
 
-build_script:
-  - "python setup.py build_ext -i"
-  # Build tar zip only once
-  - "python setup.py bdist_wheel"
-
-
 #test_script:
 #  - "python -m pytest -p no:warnings --ignore=mars/worker --timeout=1500"
 
@@ -74,4 +68,4 @@ on_success:
   - echo %APPVEYOR_REPO_TAG%
   - echo %APPVEYOR_REPO_TAG_NAME%
   - echo %APPVEYOR_REPO_BRANCH%
-  - ps: If ($env:APPVEYOR_REPO_TAG -eq "true") { Invoke-Expression "twine upload --skip-existing dist/* --verbose" } Else { write-output "Not on a tag commit, won't deploy to pypi"}
+  - ps: \bin\appveyor-upload.ps1
