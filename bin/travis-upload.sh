@@ -14,7 +14,7 @@ if [ "$TRAVIS_TAG" ]; then
   python setup.py bdist_wheel
 
   for whl in dist/*.whl; do
-	auditwheel repair $whl -w dist/
+	python -m auditwheel repair $whl -w dist/
   done
   rm dist/*-linux*.whl
 
