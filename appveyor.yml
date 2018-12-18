@@ -43,6 +43,11 @@ install:
   - "pip install -r requirements-extra.txt"
 
 
+build_script:
+  - "python setup.py build_ext -i"
+  # Build tar zip only once
+
+
 #test_script:
 #  - "python -m pytest -p no:warnings --ignore=mars/worker --timeout=1500"
 
