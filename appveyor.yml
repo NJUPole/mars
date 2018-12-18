@@ -3,7 +3,7 @@ platform:
 
 environment:
   SECUREPSD:
-    secure: 0wgRDaXnk9gCDwOLVKb+r42Sq5gUYItQkx11WsGtqEU=
+    secure: W32PjuuRBQGf05cN6X5EXg8t3/2UsFwvefBlSbioclY=
 
   matrix:
 
@@ -20,7 +20,6 @@ environment:
       PYTHON_ARCH: "64"
 
 install:
-  - set PATH=C:\Program Files (x86)\Windows Kits\10\bin\%platform%\;%PATH%
   # Install Python (from the official .msi of http://python.org) and pip when
   # not already installed.
   - ps: if (-not(Test-Path($env:PYTHON))) { & bin\appveyor_install.ps1 }
@@ -51,7 +50,7 @@ build_script:
 
 
 test_script:
-  - "python -m pytest -p no:warnings --ignore=mars/worker --timeout=1500 --cov-config .coveragerc --cov=mars mars"
+  - "python -m pytest -p no:warnings --ignore=mars/worker --timeout=1500"
 
 after_test:
 
@@ -60,9 +59,9 @@ after_test:
   - echo index-servers =                             >> %USERPROFILE%\\.pypirc
   - echo     pypi                                    >> %USERPROFILE%\\.pypirc
   - echo [pypi]                                      >> %USERPROFILE%\\.pypirc
-  - echo repository=https://upload.pypi.org/legacy/  >> %USERPROFILE%\\.pypirc
+  - echo repository=https://upload.pypi.org/test/    >> %USERPROFILE%\\.pypirc
   - echo username=pyodps                             >> %USERPROFILE%\\.pypirc
-  - echo password=just_for_test                      >> %USERPROFILE%\\.pypirc
+  - echo password=%SECUREPSD%                        >> %USERPROFILE%\\.pypirc
 
   # Workaround required to ensure setup.py finds the .pypirc under Windows
   #- set HOME=%USERPROFILE%
