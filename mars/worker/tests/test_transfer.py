@@ -16,13 +16,7 @@ import multiprocessing
 import os
 import time
 import uuid
-import unittest
 from functools import partial
-
-try:
-    from pyarrow import plasma
-except:
-    plasma = None
 
 import gevent
 from mars import promise
@@ -38,7 +32,7 @@ from mars.worker import *
 from mars.worker.chunkstore import PlasmaChunkStore
 from mars.worker.tests.base import WorkerCase
 from mars.worker.utils import WorkerActor
-
+from pyarrow import plasma
 
 
 class HolderActor(FunctionActor):
@@ -138,7 +132,6 @@ def run_transfer_worker(pool_address, session_id, plasma_socket, chunk_keys,
         plasma_helper.stop()
 
 
-@unittest.skipIf(plasma is None, 'pyarrow._plasma cannot be installed')
 class TransferTestActor(WorkerActor):
     def __init__(self, local_pool_addr, remote_pool_addr, remote_plasma_socket, remote_spill_dir):
         super(TransferTestActor, self).__init__()
