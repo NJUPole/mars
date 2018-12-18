@@ -63,11 +63,17 @@ after_test:
   - echo password=%SECUREPSD%                        >> %USERPROFILE%\\.pypirc
 
   # Workaround required to ensure setup.py finds the .pypirc under Windows
-#  - set HOME=%USERPROFILE%
+  # - set HOME=%USERPROFILE%
 
 
 on_success:
   - echo %APPVEYOR_REPO_TAG%
   - echo %APPVEYOR_REPO_TAG_NAME%
   - echo %APPVEYOR_REPO_BRANCH%
-  - ps: & \bin\appveyor-upload.ps1
+  - ps: >-
+      If ($env:APPVEYOR_REPO_TAG -eq "true"){
+          Invoke-Expression "python setup.py bdist_wheel"
+          Invoke-Expression "twine upload --skip-existing dist/* --verbose"
+      }Else {
+          write-output "Not on a tag commit, won't deploy to pypi"
+      }
