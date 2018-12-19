@@ -48,8 +48,8 @@ build_script:
   # Build tar zip only once
 
 
-#test_script:
-#  - "python -m pytest -p no:warnings --ignore=mars/worker --timeout=1500"
+test_script:
+  - "python -m pytest -p no:warnings --ignore=mars/worker --timeout=1500"
 
 after_test:
 
