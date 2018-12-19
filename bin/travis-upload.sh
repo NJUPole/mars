@@ -9,12 +9,14 @@ if [ "$TRAVIS_TAG" ]; then
   echo "username=pyodps"                             >> ~/.pypirc
   echo "password=$PASSWD"                            >> ~/.pypirc
 
-  python -m pip install twine
-
-  python setup.py bdist_wheel
-
-#  for whl in dist/*.whl; do
-#    auditwheel show $whl
+  docker run --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
+  - ls dist/
+#
+#  python -m pip install twine auditwheel
+#
+#  python setup.py bdist_wheel
+#
+#  for whl in wheelhouse/*.whl; do
 #	auditwheel repair $whl -w dist/
 #  done
 #  rm dist/*-linux*.whl
