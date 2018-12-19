@@ -13,6 +13,7 @@ matrix:
       services:
         - docker
       env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
+           UPLOAD=TRUE
     - os: osx
       language: generic
       env: PYTHON=2.7.12

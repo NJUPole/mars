@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$TRAVIS_TAG" ]; then
+if [ "$TRAVIS_TAG" ] && [ "UPLOAD" ]; then
   echo "[distutils]"                                  > ~/.pypirc
   echo "index-servers ="                             >> ~/.pypirc
   echo "    pypi"                                    >> ~/.pypirc
