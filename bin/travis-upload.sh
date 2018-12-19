@@ -11,6 +11,7 @@ if [ "$TRAVIS_TAG" ]; then
 
   if [ "$TRAVIS_OS_NAME" = "linux" ]; then
     sudo chmod 777 bin/*
+    docker pull $DOCKER_IMAGE
     docker run --rm -v -e "PYVER=$PYVER" `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
   else
     python setup.py bdist_wheel
