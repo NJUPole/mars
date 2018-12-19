@@ -8,12 +8,14 @@ yum install -y atlas-devel
 PYBIN=/opt/python/${PYVER}/bin
 "${PYBIN}/pip" install -r /io/requirements-dev.txt
 "${PYBIN}/pip" install -r /io/requirements-extra.txt
-"${PYBIN}/python" /io/setup.py bdist_wheel -d /io/dist
+
+cd /io
+"${PYBIN}/python" setup.py bdist_wheel
 
 
 # Bundle external shared libraries into the wheels
-for whl in /io/dist/*.whl; do
-    auditwheel repair "$whl" -w /io/dist/
+for whl in dist/*.whl; do
+    auditwheel repair "$whl" -w dist/
 done
 
 # Install packages and test
