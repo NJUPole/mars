@@ -7,7 +7,7 @@ matrix:
       python: "2.7"
       services:
         - docker
-      env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 PYVER=cp27-cp27m
+      env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 PYVER=cp27-cp27mu
     - sudo: required
       os: linux
       python: "3.5"
