@@ -28,14 +28,14 @@ matrix:
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then source ./bin/travis-prepare-osx.sh; fi
-  - pip install --upgrade pip setuptools wheel
 
 # command to install dependencies
 install:
-  - pip install -r requirements-dev.txt
-  - pip install -r requirements-extra.txt
-  - pip install coveralls
-  - python setup.py build_ext -i
+  - pip install --upgrade pip setuptools wheel
+#  - pip install -r requirements.txt
+#  - pip install -r requirements-extra.txt
+#  - pip install coveralls
+#  - python setup.py build_ext -i
 
 # command to run tests
 script:
