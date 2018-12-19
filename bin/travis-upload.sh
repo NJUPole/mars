@@ -9,9 +9,17 @@ if [ "$TRAVIS_TAG" ] && [ "UPLOAD" ]; then
   echo "username=pyodps"                             >> ~/.pypirc
   echo "password=$PASSWD"                            >> ~/.pypirc
 
-  sudo chmod 777 bin/*
-  docker run --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
+  if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+    sudo chmod 777 bin/*
+    docker run --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
+  else
+    python setup.py bdist_wheel
+    for whl in wheelhouse/*.whl; do
+	  auditwheel repair $whl -w dist/
+    done
+  fi
   ls dist/
+
 #
   python -m pip install twine
 #
