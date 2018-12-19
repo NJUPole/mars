@@ -12,8 +12,9 @@ if [ "$TRAVIS_TAG" ]; then
   if [ "$TRAVIS_OS_NAME" = "linux" ]; then
     sudo chmod 777 bin/*
     docker pull $DOCKER_IMAGE
-    docker run --rm -v -e "PYVER=$PYVER" `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
+    docker run --rm -e "PYVER=$PYVER" -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
   else
+    python -m pip install auditwheel
     python setup.py bdist_wheel
     for whl in wheelhouse/*.whl; do
 	  auditwheel repair $whl -w dist/
