@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$TRAVIS_TAG" ] && [ "UPLOAD" ]; then
+if [ "$TRAVIS_TAG" ]; then
   echo "[distutils]"                                  > ~/.pypirc
   echo "index-servers ="                             >> ~/.pypirc
   echo "    pypi"                                    >> ~/.pypirc
@@ -9,7 +9,7 @@ if [ "$TRAVIS_TAG" ] && [ "UPLOAD" ]; then
   echo "username=pyodps"                             >> ~/.pypirc
   echo "password=$PASSWD"                            >> ~/.pypirc
 
-  if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+  if [ "$TRAVIS_OS_NAME" = "linux" ]; then
     sudo chmod 777 bin/*
     docker run --rm -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
   else
