@@ -5,11 +5,11 @@ set -e -x
 yum install -y atlas-devel
 
 # Compile wheels
-for PYBIN in /opt/python/*/bin; do
-    "${PYBIN}/pip" install -r /io/requirements-dev.txt
-    "${PYBIN}/pip" install -r /io/requirements-extra.txt
-    "${PYBIN}/python" /io/setup.py bdist_wheel -d /io/dist
-done
+PYBIN=/opt/python/${PYVER}/bin
+"${PYBIN}/pip" install -r /io/requirements-dev.txt
+"${PYBIN}/pip" install -r /io/requirements-extra.txt
+"${PYBIN}/python" /io/setup.py bdist_wheel -d /io/dist
+
 
 # Bundle external shared libraries into the wheels
 for whl in /io/dist/*.whl; do
