@@ -62,7 +62,7 @@ script:
   coverage combine build/ && coverage report --fail-under=80
 
 after_success:
-  - coveralls
+#  - coveralls
   - ./bin/travis-upload.sh
 # Add env var to detect it during build
 env: TRAVIS=True
