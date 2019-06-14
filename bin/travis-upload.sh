@@ -10,6 +10,11 @@ else
     sudo chmod 777 bin/*
     docker pull $DOCKER_IMAGE
     docker run --rm -e "PYVER=$PYVER" -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
+
+    if [ -z "$PYVER2" ]; then
+      docker run --rm -e "PYVER=$PYVER2" -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
+    fi
+
   else
     virtualenv wheelenv
     source wheelenv/bin/activate
@@ -34,7 +39,7 @@ else
   echo "index-servers ="                             >> ~/.pypirc
   echo "    pypi"                                    >> ~/.pypirc
   echo "[pypi]"                                      >> ~/.pypirc
-  echo "repository=https://upload.pypi.org/legacy/"  >> ~/.pypirc
+  echo "repository=https://test.pypi.org/legacy/"  >> ~/.pypirc
   echo "username=pyodps"                             >> ~/.pypirc
   echo "password=$PASSWD"                            >> ~/.pypirc
 
