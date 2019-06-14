@@ -41,7 +41,7 @@ else
   echo "[pypi]"                                      >> ~/.pypirc
   echo "repository=https://test.pypi.org/legacy/"  >> ~/.pypirc
   echo "username=pyodps"                             >> ~/.pypirc
-  echo "password=$PASSWD"                            >> ~/.pypirc
+  echo "password=$PYPIPSD"                            >> ~/.pypirc
 
   python -m pip install twine
   python -m twine upload -r pypi --skip-existing dist/*.whl
