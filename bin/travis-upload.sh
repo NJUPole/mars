@@ -38,11 +38,12 @@ else
   echo "[distutils]"                                  > ~/.pypirc
   echo "index-servers ="                             >> ~/.pypirc
   echo "    pypi"                                    >> ~/.pypirc
+  echo "    testpypi"                                    >> ~/.pypirc
   echo "[pypi]"                                      >> ~/.pypirc
   echo "repository=https://test.pypi.org/legacy/"  >> ~/.pypirc
   echo "username=pyodps"                             >> ~/.pypirc
   echo "password=$PYPIPSD"                            >> ~/.pypirc
 
   python -m pip install twine
-  python -m twine upload -r pypi --skip-existing dist/*.whl
+  python -m twine upload -r testpypi --skip-existing dist/*.whl
 fi
