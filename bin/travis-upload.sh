@@ -39,7 +39,7 @@ else
   echo "index-servers ="                             >> ~/.pypirc
   echo "    pypi"                                    >> ~/.pypirc
   echo "    testpypi"                                    >> ~/.pypirc
-  echo "[pypi]"                                      >> ~/.pypirc
+  echo "[testpypi]"                                      >> ~/.pypirc
   echo "repository=https://test.pypi.org/legacy/"  >> ~/.pypirc
   echo "username=pyodps"                             >> ~/.pypirc
   echo "password=$PYPIPSD"                            >> ~/.pypirc
