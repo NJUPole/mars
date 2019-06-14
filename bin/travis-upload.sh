@@ -11,7 +11,7 @@ else
     docker pull $DOCKER_IMAGE
     docker run --rm -e "PYVER=$PYVER" -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
 
-    if [ -z "$PYVER2" ]; then
+    if [ "$PYVER2" ]; then
       docker run --rm -e "PYVER=$PYVER2" -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
     fi
 
