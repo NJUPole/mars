@@ -11,7 +11,7 @@ else
     docker pull $DOCKER_IMAGE
 
     pyvers=$(echo $PYVER | tr ":" "\n")
-    for pyver in pyvers
+    for pyver in $pyvers
     do
       docker run --rm -e "PYVER=$pyver" -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/bin/travis-build-wheels.sh
     done
