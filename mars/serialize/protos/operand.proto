@@ -477,6 +477,7 @@ message OperandDef {
         FAISS_QUERY = 2236;
         PROXIMA_SIMPLE_BUILDER = 2238;
         PROXIMA_SIMPLE_SEARCHER = 2239;
+        PROXIMA_BUILD_MMAP = 2240;
         KNEIGHBORS_GRAPH = 2237;
 
         // CLUSTER
