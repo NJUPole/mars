@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 class BaseOperandActor(SchedulerActor):
     @staticmethod
     def gen_uid(session_id, op_key):
-        return f's:h1:operand${session_id}${op_key}'
+        return f's:0:operand${session_id}${op_key}'
 
     def __init__(self, session_id, graph_id, op_key, op_info, worker=None,
                  with_kvstore=True, schedulers=None):

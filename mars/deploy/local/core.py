@@ -20,6 +20,9 @@ import os
 import signal
 import sys
 import time
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)-12s %(process)d %(levelname)-8s %(message)s')
 
 from ...actors import create_actor_pool
 from ...cluster_info import StaticClusterDiscoverer

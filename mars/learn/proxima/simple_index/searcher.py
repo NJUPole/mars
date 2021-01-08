@@ -168,7 +168,7 @@ class ProximaSearcher(LearnOperand, LearnOperandMixin):
     @classmethod
     def _build_download_chunks(cls, op, indexes):
         ctx = get_context()
-        workers = ctx.get_worker_addresses() or [None]
+        workers = [None]
         if len(workers) < len(indexes):
             workers = [workers[i % len(workers)] for i in range(len(indexes))]
         indexes_iter = iter(itertools.cycle(indexes))
@@ -217,8 +217,9 @@ class ProximaSearcher(LearnOperand, LearnOperandMixin):
         else:
             # index path
             fs: FileSystem = get_fs(index, op.storage_options)
-            index_paths = [f for f in fs.ls(index)
-                           if f.rsplit('/', 1)[-1].startswith('proxima_')]
+            index_paths = ['path' for _ in range(200)]
+            # index_paths = [f for f in fs.ls(index)
+            #                if f.rsplit('/', 1)[-1].startswith('proxima_')]
             download_chunks = cls._build_download_chunks(op, index_paths)
             iters = [iter(itertools.cycle(i)) for i in download_chunks.values()]
             built_indexes = []
