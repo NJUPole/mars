@@ -23,6 +23,10 @@ from io import BytesIO
 from numbers import Integral
 
 import numpy as np
+try:
+    from tqdm import tqdm
+except ImportError:
+    tqdm = None
 
 from ..config import options
 from ..errors import ResponseMalformed, ExecutionInterrupted, ExecutionFailed, \
@@ -31,7 +35,8 @@ from ..operands import Fetch
 from ..serialize import dataserializer
 from ..serialize.dataserializer import pyarrow
 from ..tensor.core import Indexes
-from ..utils import build_tileable_graph, sort_dataframe_result, numpy_dtype_from_descr_json
+from ..utils import build_tileable_graph, sort_dataframe_result, \
+    numpy_dtype_from_descr_json, in_interactive
 
 logger = logging.getLogger(__name__)
 
@@ -176,6 +181,19 @@ class Session(object):
                 raise ExecutionFailed('Graph execution failed with unknown reason.')
         raise ExecutionStateUnknown('Unknown graph execution state ' + resp_json['state'])
 
+    def _get_graph_progress(self, graph_url, timeout=None):
+        import requests
+        try:
+            resp = self._req_session.get(graph_url, params={'wait_timeout': timeout,
+                                                            'type': 'progress'})
+        except requests.ConnectionError as ex:
+            err_msg = str(ex)
+            if 'ConnectionResetError' in err_msg or 'Connection refused' in err_msg:
+                return False
+            raise
+        resp_json = self._handle_json_response(resp, raises=False)
+        return resp_json['progress']
+
     def run(self, *tileables, **kw):
         timeout = kw.pop('timeout', -1)
         compose = kw.pop('compose', True)
@@ -205,11 +223,21 @@ class Session(object):
         graph_key = resp_json['graph_key']
         graph_url = f'{session_url}/graph/{graph_key}'
 
+        if tqdm is not None and in_interactive():
+            progress = tqdm(total=100, desc=f'Graph: {graph_key[:5]}')
+        else:
+            progress = None
+
         exec_start_time = time.time()
         time_elapsed = 0
         check_interval = options.check_interval
         while timeout <= 0 or time_elapsed < timeout:
             timeout_val = min(check_interval, timeout - time_elapsed) if timeout > 0 else check_interval
+
+            if progress is not None:
+                p = self._get_graph_progress(graph_url, timeout_val)
+                progress.update(p - progress.n)
+
             try:
                 if self._check_response_finished(graph_url, timeout_val):
                     break

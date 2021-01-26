@@ -171,6 +171,11 @@ class GraphApiHandler(MarsApiRequestHandler):
         if wait_timeout is not None:
             wait_timeout = float(wait_timeout)
 
+        info_type = self.get_argument('type', 'state')
+
+        if info_type not in ['state', 'progress']:
+            raise web.HTTPError(403, 'Unknown type requests')
+
         try:
             if wait_timeout:
                 if wait_timeout <= 1e-6:
@@ -182,16 +187,25 @@ class GraphApiHandler(MarsApiRequestHandler):
 
                 try:
                     yield from _with_timeout(wait_timeout, self._executor.submit(_wait_fun))
-                    state = self.web_api.get_graph_state(session_id, graph_key)
+                    if info_type == 'state':
+                        resp = dict(state=self.web_api.get_graph_state(session_id, graph_key).value)
+                    else:
+                        resp = dict(progress=self.web_api.get_graph_progress(session_id, graph_key))
                 except TimeoutError:
-                    state = GraphState.PREPARING
+                    if info_type == 'state':
+                        resp = dict(state='preparing')
+                    else:
+                        resp = dict(progress=0)
             else:
-                state = self.web_api.get_graph_state(session_id, graph_key)
+                if info_type == 'state':
+                    resp = dict(state=self.web_api.get_graph_state(session_id, graph_key).value)
+                else:
+                    resp = dict(progress=self.web_api.get_graph_progress(session_id, graph_key))
+
         except GraphNotExists:
             raise web.HTTPError(404, 'Graph not exists')
 
-        resp = dict(state=state.value)
-        if state == GraphState.FAILED:
+        if info_type == 'state' and resp['state'] == GraphState.FAILED.value:
             exc_info = self.web_api.get_graph_exc_info(session_id, graph_key)
             if exc_info is not None:
                 resp['exc_info'] = base64.b64encode(pickle.dumps(exc_info)).decode('ascii')
