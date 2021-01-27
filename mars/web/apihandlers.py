@@ -190,17 +190,19 @@ class GraphApiHandler(MarsApiRequestHandler):
                     if info_type == 'state':
                         resp = dict(state=self.web_api.get_graph_state(session_id, graph_key).value)
                     else:
-                        resp = dict(progress=self.web_api.get_graph_progress(session_id, graph_key))
+                        finished, total = self.web_api.get_graph_progress(session_id, graph_key)
+                        resp = dict(finished=finished, total=total)
                 except TimeoutError:
                     if info_type == 'state':
                         resp = dict(state='preparing')
                     else:
-                        resp = dict(progress=0)
+                        resp = dict(finished=0, total=0)
             else:
                 if info_type == 'state':
                     resp = dict(state=self.web_api.get_graph_state(session_id, graph_key).value)
                 else:
-                    resp = dict(progress=self.web_api.get_graph_progress(session_id, graph_key))
+                    finished, total = self.web_api.get_graph_progress(session_id, graph_key)
+                    resp = dict(finished=finished, total=total)
 
         except GraphNotExists:
             raise web.HTTPError(404, 'Graph not exists')

@@ -173,7 +173,7 @@ class GraphMetaActor(SchedulerActor):
         self._update_session_graph_info()
 
     @log_unhandled
-    def calc_stats(self):
+    def calc_stats(self, return_only_progress=False):
         states = list(OperandState.__members__.values())
         state_mapping = OrderedDict((v, idx) for idx, v in enumerate(states))
         state_names = [s.name for s in state_mapping]
@@ -210,7 +210,11 @@ class GraphMetaActor(SchedulerActor):
                 transposed[state].append(data_src[op][sid])
 
         percentage = finished * 100.0 / total_count if total_count != 0 else 1
-        return ops, transposed, percentage
+
+        if return_only_progress:
+            return finished, total_count
+        else:
+            return ops, transposed, percentage
 
 
 class GraphWaitActor(SchedulerActor):

@@ -191,7 +191,7 @@ class MarsAPI(object):
 
     def get_graph_progress(self, session_id, graph_key):
         graph_meta_ref = self.get_graph_meta_ref(session_id, graph_key)
-        return graph_meta_ref.calc_stats()[-1]
+        return graph_meta_ref.calc_stats(return_only_progress=True)
 
     def get_graph_exc_info(self, session_id, graph_key):
         graph_meta_ref = self.get_graph_meta_ref(session_id, graph_key)

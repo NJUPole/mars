@@ -192,7 +192,7 @@ class Session(object):
                 return False
             raise
         resp_json = self._handle_json_response(resp, raises=False)
-        return resp_json['progress']
+        return resp_json['finished'], resp_json['total']
 
     def run(self, *tileables, **kw):
         timeout = kw.pop('timeout', -1)
@@ -224,7 +224,7 @@ class Session(object):
         graph_url = f'{session_url}/graph/{graph_key}'
 
         if tqdm is not None and in_interactive():
-            progress = tqdm(total=100, desc=f'Graph({graph_key[:5]})')
+            progress = tqdm(total=1, desc=f'Graph({graph_key[:5]})')
         else:
             progress = None
 
@@ -235,9 +235,10 @@ class Session(object):
             timeout_val = min(check_interval, timeout - time_elapsed) if timeout > 0 else check_interval
 
             if progress is not None:
-                p = self._get_graph_progress(graph_url, timeout_val)
-                if p == 0:
+                p, total = self._get_graph_progress(graph_url, timeout_val)
+                if total == 0:
                     progress.set_description(f'Graph({graph_key[:5]}) is preparing')
+                progress.reset(total)
                 progress.update(p - progress.n)
 
             try:
